@@ -11,7 +11,6 @@ function App() {
   const [searchError, setSearchError] = useState(false); 
 
   useEffect(() => {
-    
     fetchContribuyentes();
   }, []);
 
@@ -28,6 +27,7 @@ function App() {
     try {
       const response = await axios.get(`https://localhost:7217/api/ComprobantesFiscales/${rncCedula}`);
       setSelectedContribuyente(response.data);
+      setSelectedRncCedula(rncCedula);
       setSearchError(false); 
     } catch (error) {
       console.error('Error al buscar el contribuyente:', error);
@@ -60,6 +60,7 @@ function App() {
           El campo RNC/Cédula está vacío. Por favor, ingrese un valor antes de buscar.
         </div>
       )}
+      
       {selectedContribuyente && !searchError && ( // Mostrar información del contribuyente solo si no hay error de búsqueda
         <div>
           <h2>Información del Contribuyente Seleccionado:</h2>
@@ -70,7 +71,6 @@ function App() {
                   <td>Monto Total:</td>
                   <td>{selectedContribuyente.totalMonto} RD$</td>
                 </tr>
-             
                 <tr>
                   <td>TOTALITBIS:</td>
                   <td>{selectedContribuyente.totalITBIS} RD$</td>
@@ -83,6 +83,7 @@ function App() {
             <table>
               <thead>
                 <tr>
+                <th>RNC/CEDULA</th>
                   <th>NCF</th>
                   <th>Monto</th>
                   <th>ITBIS 18%</th>
@@ -91,6 +92,7 @@ function App() {
               <tbody>
                 {selectedContribuyente.comprobantes.map((comprobante) => (
                   <tr key={comprobante.id}>
+                     <td>{comprobante.rncCedula}</td>
                     <td>{comprobante.ncf}</td>
                     <td>{comprobante.monto} RD$</td>
                     <td>{comprobante.itbis18} RD$</td>
@@ -101,6 +103,7 @@ function App() {
           </div>
         </div>
       )}
+
       <h2>Lista de Contribuyentes:</h2>
       <div className="table-container">
         <table>
